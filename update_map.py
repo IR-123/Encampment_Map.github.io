@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-
+import requests
 import folium
 import pandas as pd
 import base64
@@ -62,16 +62,22 @@ def process_data():
     )
     folium.TileLayer("cartodbpositron").add_to(usa_map)
 
-    encampment_icon = "tent.png"
-    with open("missing_photo.jpg", "rb") as img_file:
+    encampment_icon = "images/tent.png"
+    with open("images/missing_photo.jpg", "rb") as img_file:
         default_encoded_image = base64.b64encode(img_file.read()).decode("utf-8")
 
-    for index, row in encampment_data.iterrows():
-        if False and row["Photo Location"] is not None:
-            with open(row["Photo Location"], "rb") as img_file:
-                encoded_image = base64.b64encode(img_file.read()).decode("utf-8")
+    for _, row in encampment_data.iterrows():
+        if False and row["Thumbnail Photo"] is not None:
+            photo_id = row["Thumbnail Photo"].split("d/")[-1].split("/")[0]
+            file_url = f"https://drive.google.com/uc?export=view&id={photo_id}"
+            img_data = requests.get(file_url).content
+
+            # with open('image_name.jpg', 'wb') as handler:
+            #     handler.write(img_data)
+            # with open(file_url, "rb") as img_file:
+            encoded_image = base64.b64encode(img_data).decode("utf-8")
         else:
-            print(f"Warning: Image Path is None for row {index}")
+            print(f"Warning: Image Path is None for row {row['University Name']}")
             encoded_image = default_encoded_image
 
         popup_html = f"""
@@ -114,7 +120,7 @@ def process_data():
     # Define maximum and minimum bounds for the map
     max_bounds = usa_map.get_bounds()
     usa_map.max_bounds = max_bounds
-    usa_map.save("encampments_map.html")
+    usa_map.save("encampments_map2.html")
 
 
 process_data()
