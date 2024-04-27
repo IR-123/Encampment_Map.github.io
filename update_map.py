@@ -64,7 +64,7 @@ def process_data():
     cap_icon = "images/cap.png"
 
     for _, row in encampment_data.iterrows():
-        if row["Thumbnail Photo"] is not None and pd.notna(row["Thumbnail Photo"]):
+        if pd.notna(row["Thumbnail Photo"]) and row["Thumbnail Photo"] is not None:
             photo_id = row["Thumbnail Photo"].split("d/")[-1].split("/")[0]
             image_url = f"https://drive.google.com/thumbnail?id={photo_id}&sz=w320"
         else:
@@ -114,7 +114,7 @@ def process_data():
                 </h6>
             """
 
-        if row["Category"] == "Encampment":
+        if pd.notna(row["Category"]) and row["Category"] == "Encampment":
             icon = folium.CustomIcon(encampment_icon, icon_size=(60, 60))
         else:
             icon = folium.CustomIcon(cap_icon, icon_size=(60, 60))
