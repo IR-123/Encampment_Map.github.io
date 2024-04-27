@@ -1,9 +1,7 @@
 import json
 from datetime import datetime
-import requests
 import folium
 import pandas as pd
-import base64
 
 
 def update_version():
@@ -63,22 +61,14 @@ def process_data():
     folium.TileLayer("cartodbpositron").add_to(usa_map)
 
     encampment_icon = "images/tent.png"
-    with open("images/missing_photo.jpg", "rb") as img_file:
-        default_encoded_image = base64.b64encode(img_file.read()).decode("utf-8")
 
     for _, row in encampment_data.iterrows():
-        if row["Thumbnail Photo"] is not None and str(row["Thumbnail Photo"]) != "<NA>":
+        if row["Thumbnail Photo"] is not None and pd.notna(row["Thumbnail Photo"]):
             photo_id = row["Thumbnail Photo"].split("d/")[-1].split("/")[0]
-            file_url = f"https://drive.google.com/uc?export=view&id={photo_id}"
-            img_data = requests.get(file_url).content
-
-            # with open('image_name.jpg', 'wb') as handler:
-            #     handler.write(img_data)
-            # with open(file_url, "rb") as img_file:
-            encoded_image = base64.b64encode(img_data).decode("utf-8")
+            image_url = f"https://drive.google.com/thumbnail?id={photo_id}&sz=w320"
         else:
             print(f"Warning: Image Path is None for row {row['University Name']}")
-            encoded_image = default_encoded_image
+            image_url = "https://drive.google.com/thumbnail?id=1y7nBpt24WcKlb5qD1vtb0N2i1JxKVhw9&sz=w320"
 
         popup_html = f"""
             <!DOCTYPE html>
@@ -99,8 +89,28 @@ def process_data():
             </h5>
             <h5 align="left" style="font-family:Calibri; color:green"> <strong><i class="fa-solid fa-handcuffs"></i> Number of Arrests:</strong> {row['Number of Arrests']}
             </h5>
-            <img src="data:image/jpeg;base64,{encoded_image}" alt="Image" style="width:250px;height:200px;">
-    
+            <img src="{image_url}" alt="Image" style="width:250px;height:200px;">
+            """
+
+        if pd.notna(row["Police Violence"]):
+            popup_html += f"""
+                <h6 align="left" style="font-family:Calibri; color:green"> <strong><i class="fa-solid fa-video"></i> Videos:</strong>
+                    <a href={row['Police Violence']} target="_blank">Police Violence</a>
+                </h6>
+            """
+
+        if pd.notna(row["Video_1"]):
+            popup_html += f"""
+                <h6 align="left" style="font-family:Calibri; color:green"> <strong><i class="fa-solid fa-video"></i> Videos:</strong>
+                    <a href={row['Video_1']} target="_blank">Solidarity Actions Video 1</a>
+                </h6>
+            """
+
+        if pd.notna(row["Video_2"]):
+            popup_html += f"""
+                <h6 align="left" style="font-family:Calibri; color:green"> <strong><i class="fa-solid fa-video"></i> Videos:</strong>
+                    <a href={row['Video_2']} target="_blank">Solidarity Actions Video 2</a>
+                </h6>
             """
 
         icon = folium.CustomIcon(
