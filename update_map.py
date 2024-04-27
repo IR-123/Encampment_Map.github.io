@@ -61,6 +61,7 @@ def process_data():
     folium.TileLayer("cartodbpositron").add_to(usa_map)
 
     encampment_icon = "images/tent.png"
+    cap_icon = "images/cap.png"
 
     for _, row in encampment_data.iterrows():
         if row["Thumbnail Photo"] is not None and pd.notna(row["Thumbnail Photo"]):
@@ -113,9 +114,10 @@ def process_data():
                 </h6>
             """
 
-        icon = folium.CustomIcon(
-            encampment_icon, icon_size=(60, 60)
-        )  # Adjust icon size as needed , icon_size=(50, 50)
+        if row["Category"] == "Encampment":
+            icon = folium.CustomIcon(encampment_icon, icon_size=(60, 60))
+        else:
+            icon = folium.CustomIcon(cap_icon, icon_size=(60, 60))
         popup = folium.Popup(popup_html, max_width=300)
         folium.vector_layers.Marker(
             location=[row["Latitude"], row["Longitude"]],
