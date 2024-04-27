@@ -67,7 +67,7 @@ def process_data():
         default_encoded_image = base64.b64encode(img_file.read()).decode("utf-8")
 
     for _, row in encampment_data.iterrows():
-        if False and row["Thumbnail Photo"] is not None:
+        if row["Thumbnail Photo"] is not None:
             photo_id = row["Thumbnail Photo"].split("d/")[-1].split("/")[0]
             file_url = f"https://drive.google.com/uc?export=view&id={photo_id}"
             img_data = requests.get(file_url).content
