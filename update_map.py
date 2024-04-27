@@ -132,7 +132,8 @@ def process_data():
     # Define maximum and minimum bounds for the map
     max_bounds = usa_map.get_bounds()
     usa_map.max_bounds = max_bounds
-    usa_map.save("encampments_map2.html")
+    usa_map.save("encampments_map.html")
+    update_version()
 
 
 process_data()
