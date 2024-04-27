@@ -19,7 +19,7 @@ jobs:
           pip install -r requirements.txt
       - name: execute py script
         run: |
-          python test.py
+          python update_map.py
       - name: Commit updates
         run: |
           git config --global user.name 'Srujan Routhu'
