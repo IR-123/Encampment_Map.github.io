@@ -1,6 +1,9 @@
 name: map update
 
-on: workflow_dispatch
+on:
+  schedule:
+    - cron: "15 * * * *"
+  workflow_dispatch:
 
 jobs:
   build:
