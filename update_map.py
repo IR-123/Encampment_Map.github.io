@@ -57,6 +57,8 @@ def process_data():
         max_lat=max_lat,
         min_lon=min_lon,
         max_lon=max_lon,
+        scrollWheelZoom=False,
+        dragging=False,
     )
     folium.TileLayer("cartodbpositron").add_to(usa_map)
 
@@ -126,12 +128,13 @@ def process_data():
             tooltip=str(row["University Name"]),
         ).add_to(usa_map)
 
-    # Set the map's boundaries based on the maximum and minimum latitudes and longitudes
-    usa_map.fit_bounds([[min_lat, min_lon], [max_lat, max_lon]], padding=(10, 10))
+    # # Set the map's boundaries based on the maximum and minimum latitudes and longitudes
+    # usa_map.fit_bounds([[min_lat, min_lon], [max_lat, max_lon]], padding=(10, 10))
+    #
+    # # Define maximum and minimum bounds for the map
+    # max_bounds = usa_map.get_bounds()
+    # usa_map.max_bounds = max_bounds
 
-    # Define maximum and minimum bounds for the map
-    max_bounds = usa_map.get_bounds()
-    usa_map.max_bounds = max_bounds
     usa_map.save("encampments_map.html")
     update_version()
 
