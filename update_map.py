@@ -58,7 +58,7 @@ def process_data():
         min_lon=min_lon,
         max_lon=max_lon,
         # scrollWheelZoom=False,
-        dragging=False,
+        # dragging=False,
     )
     folium.TileLayer("cartodbpositron").add_to(usa_map)
 
