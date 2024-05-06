@@ -57,7 +57,7 @@ def process_data():
         max_lat=max_lat,
         min_lon=min_lon,
         max_lon=max_lon,
-        scrollWheelZoom=False,
+        # scrollWheelZoom=False,
         dragging=False,
     )
     folium.TileLayer("cartodbpositron").add_to(usa_map)
@@ -130,6 +130,16 @@ def process_data():
 
     # Set the map's boundaries based on the maximum and minimum latitudes and longitudes
     usa_map.fit_bounds([[min_lat, min_lon], [max_lat, max_lon]], padding=(10, 10))
+
+    # Button to turn scroll zoom on/off
+    folium.plugins.ScrollZoomToggler().add_to(usa_map)
+
+    folium.plugins.Fullscreen(
+        position="topright",
+        title="Expand me",
+        title_cancel="Exit me",
+        force_separate_button=True,
+        ).add_to(usa_map)
 
     # Define maximum and minimum bounds for the map
     max_bounds = usa_map.get_bounds()
