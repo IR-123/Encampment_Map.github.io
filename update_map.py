@@ -134,7 +134,7 @@ def process_data():
     # Button to turn scroll zoom on/off
     folium.plugins.ScrollZoomToggler().add_to(usa_map)
 
-    # Botton for fullscreen mode
+    # Button for fullscreen mode
     folium.plugins.Fullscreen(
         position="topright",
         title="Expand me",
