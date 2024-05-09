@@ -41,12 +41,12 @@ def process_data():
 
     # Get the maximum and minimum latitude and longitude
     max_lat, min_lat = (
-        encampment_data["Latitude"].max(),
-        encampment_data["Latitude"].min(),
+        encampment_data["Latitude"].max()+10,
+        encampment_data["Latitude"].min()-10,
     )
     max_lon, min_lon = (
-        encampment_data["Longitude"].max(),
-        encampment_data["Longitude"].min(),
+        encampment_data["Longitude"].max()+10,
+        encampment_data["Longitude"].min()-10,
     )
 
     # Create USA map with folium wrapper around leaflet.js
@@ -59,6 +59,7 @@ def process_data():
         max_lat=max_lat,
         min_lon=min_lon,
         max_lon=max_lon,
+        # world_copy_jump=True # copies markers across the wrapped map
         tiles=folium.TileLayer(no_wrap=True) # prevent map from infinitely wrapping
         # scrollWheelZoom=False,
         # dragging=False,
