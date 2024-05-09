@@ -52,12 +52,14 @@ def process_data():
     # Create USA map with folium wrapper around leaflet.js
     usa_map = folium.Map(
         location=usa_coord,
+        max_bounds = True,
         zoom_start=3,
         max_zoom=12,
         min_lat=min_lat,
         max_lat=max_lat,
         min_lon=min_lon,
-        max_lon=max_lon
+        max_lon=max_lon,
+        tiles=folium.TileLayer(no_wrap=True) # prevent map from infinitely wrapping
         # scrollWheelZoom=False,
         # dragging=False,
     )
@@ -134,7 +136,7 @@ def process_data():
 
     # Button to turn scroll zoom on/off
     folium.plugins.ScrollZoomToggler().add_to(usa_map)
-
+    
     # Button for fullscreen mode
     folium.plugins.Fullscreen(
         position="topright",
