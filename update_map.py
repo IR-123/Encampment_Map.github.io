@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 import folium
+from folium.plugins import Fullscreen, ScrollZoomToggler
 import pandas as pd
 
 
@@ -51,7 +52,7 @@ def process_data():
     # Create USA map with folium wrapper around leaflet.js
     usa_map = folium.Map(
         location=usa_coord,
-        zoom_start=4,
+        zoom_start=3,
         max_zoom=12,
         min_lat=min_lat,
         max_lat=max_lat,
@@ -137,8 +138,8 @@ def process_data():
     # Button for fullscreen mode
     folium.plugins.Fullscreen(
         position="topright",
-        title="Expand me",
-        title_cancel="Exit me",
+        title="Expand Map",
+        title_cancel="Exit Map",
         force_separate_button=True,
         ).add_to(usa_map)
 
