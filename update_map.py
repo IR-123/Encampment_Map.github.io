@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 import folium
+from folium.plugins import Fullscreen, ScrollZoomToggler
 import pandas as pd
 
 
@@ -40,23 +41,28 @@ def process_data():
 
     # Get the maximum and minimum latitude and longitude
     max_lat, min_lat = (
-        encampment_data["Latitude"].max(),
-        encampment_data["Latitude"].min(),
+        encampment_data["Latitude"].max()+10,
+        encampment_data["Latitude"].min()-10,
     )
     max_lon, min_lon = (
-        encampment_data["Longitude"].max(),
-        encampment_data["Longitude"].min(),
+        encampment_data["Longitude"].max()+10,
+        encampment_data["Longitude"].min()-10,
     )
 
     # Create USA map with folium wrapper around leaflet.js
     usa_map = folium.Map(
         location=usa_coord,
-        zoom_start=4,
+        max_bounds = True,
+        zoom_start=3,
         max_zoom=12,
         min_lat=min_lat,
         max_lat=max_lat,
         min_lon=min_lon,
         max_lon=max_lon,
+        # world_copy_jump=True # copies markers across the wrapped map
+        tiles=folium.TileLayer(no_wrap=True) # prevent map from infinitely wrapping
+        # scrollWheelZoom=False,
+        # dragging=False,
     )
     folium.TileLayer("cartodbpositron").add_to(usa_map)
 
@@ -127,11 +133,23 @@ def process_data():
         ).add_to(usa_map)
 
     # Set the map's boundaries based on the maximum and minimum latitudes and longitudes
-    usa_map.fit_bounds([[min_lat, min_lon], [max_lat, max_lon]], padding=(10, 10))
+    # usa_map.fit_bounds([[min_lat, min_lon], [max_lat, max_lon]], padding=(10, 10))
+
+    # Button to turn scroll zoom on/off
+    folium.plugins.ScrollZoomToggler().add_to(usa_map)
+    
+    # Button for fullscreen mode
+    folium.plugins.Fullscreen(
+        position="topright",
+        title="Expand Map",
+        title_cancel="Exit Map",
+        force_separate_button=True,
+        ).add_to(usa_map)
 
     # Define maximum and minimum bounds for the map
-    max_bounds = usa_map.get_bounds()
-    usa_map.max_bounds = max_bounds
+    # max_bounds = usa_map.get_bounds()
+    # usa_map.max_bounds = max_bounds
+
     usa_map.save("encampments_map.html")
     update_version()
 
